@@ -1,0 +1,37 @@
+# Laravel Backend
+/inv-back/vendor
+/inv-back/node_modules
+/inv-back/public/hot
+/inv-back/public/storage
+/inv-back/storage/*.key
+/inv-back/storage/framework/cache/*
+/inv-back/storage/framework/sessions/*
+/inv-back/storage/framework/views/*
+/inv-back/.env
+/inv-back/.env.backup
+/inv-back/.phpunit.result.cache
+/inv-back/docker-compose.override.yml
+/inv-back/Homestead.json
+/inv-back/Homestead.yaml
+/inv-back/npm-debug.log
+/inv-back/yarn-error.log
+
+# React Frontend
+/inv-frontend/node_modules
+/inv-frontend/.pnp
+/inv-frontend/.pnp.js
+/inv-frontend/coverage
+/inv-frontend/build
+/inv-frontend/.DS_Store
+/inv-frontend/.env.local
+/inv-frontend/.env.development.local
+/inv-frontend/.env.test.local
+/inv-frontend/.env.production.local
+/inv-frontend/npm-debug.log*
+/inv-frontend/yarn-debug.log*
+/inv-frontend/yarn-error.log*
+
+# General
+.DS_Store
+.idea
+.vscode 
