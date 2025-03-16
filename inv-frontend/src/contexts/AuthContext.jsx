@@ -59,17 +59,30 @@ export const AuthProvider = ({ children }) => {
         throw new Error('Invalid login response');
       }
     } catch (error) {
-      throw error;
+      if (error.response) {
+        // Server responded with an error
+        if (error.response.status === 401) {
+          throw new Error('Invalid username or password');
+        } else if (error.response.status === 422) {
+          const validationErrors = error.response.data;
+          const errorMessages = Object.values(validationErrors).flat();
+          throw new Error(errorMessages.join(', '));
+        }
+      }
+      throw new Error('Unable to connect to the server. Please try again later.');
     }
   };
 
-  const register = async (username, password) => {
+  const register = async (name, email, username, password) => {
     try {
-      const response = await api.post('/register', {
+      const registerResponse = await api.post('/register', {
+        name,
+        email,
         username,
         password,
       });
-      const { status, user, authorization } = response.data;
+
+      const { status, user, authorization } = registerResponse.data;
       if (status === 'success' && authorization.token) {
         localStorage.setItem('token', authorization.token);
         setIsAuthenticated(true);
@@ -79,7 +92,27 @@ export const AuthProvider = ({ children }) => {
         throw new Error('Invalid register response');
       }
     } catch (error) {
-      throw error;
+      if (error.response) {
+        // Handle validation errors
+        if (error.response.status === 422) {
+          const validationErrors = error.response.data;
+          const errorMessages = [];
+          
+          // Format validation errors
+          Object.entries(validationErrors).forEach(([field, messages]) => {
+            if (Array.isArray(messages)) {
+              errorMessages.push(...messages);
+            } else {
+              errorMessages.push(messages);
+            }
+          });
+          
+          throw new Error(errorMessages.join('\n'));
+        }
+        // Handle other server errors
+        throw new Error(error.response.data.message || 'Registration failed');
+      }
+      throw new Error('Unable to connect to the server. Please try again later.');
     }
   };
 
